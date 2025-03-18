@@ -28,6 +28,8 @@ public class RideDTO {
 
     private DriverDTO driver;
 
+    private String otp;
+
 
     private PaymentMethods paymentMethods;
 
