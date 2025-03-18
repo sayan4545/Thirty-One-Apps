@@ -5,7 +5,11 @@ import com.thirtyOneApps.dtos.RideDTO;
 import com.thirtyOneApps.dtos.RideRequestDTO;
 import com.thirtyOneApps.dtos.RiderDTO;
 import com.thirtyOneApps.entities.RideRequest;
+import com.thirtyOneApps.entities.enums.RideRequestStatus;
+import com.thirtyOneApps.repositories.RideRequestRepository;
 import com.thirtyOneApps.services.RiderService;
+import com.thirtyOneApps.strategies.DriverMatchingStrategy;
+import com.thirtyOneApps.strategies.RideFareCalculationStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,13 +20,21 @@ import java.util.List;
 @Service
 @Slf4j
 public class RiderServiceImpl implements RiderService {
-
+    private final RideFareCalculationStrategy rideFareCalculationStrategy;
+    private final DriverMatchingStrategy driverMatchingStrategy;
+    private final RideRequestRepository rideRequestRepository;
     private final ModelMapper modelMapper;
     @Override
     public RideRequestDTO requestRide(RideRequestDTO rideRequestDTO) {
         RideRequest rideRequest = modelMapper.map(rideRequestDTO,RideRequest.class);
-        log.info(rideRequest.toString());
-        return null;
+        rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
+
+        Double fare = rideFareCalculationStrategy.calculateFare(rideRequestDTO);
+        rideRequest.setFare(fare);
+        RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
+        driverMatchingStrategy.findMatchingDrivers(rideRequest);
+
+        return modelMapper.map(savedRideRequest,RideRequestDTO.class);
     }
 
     @Override
