@@ -29,7 +29,7 @@ public class RiderServiceImpl implements RiderService {
         RideRequest rideRequest = modelMapper.map(rideRequestDTO,RideRequest.class);
         rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
 
-        Double fare = rideFareCalculationStrategy.calculateFare(rideRequestDTO);
+        Double fare = rideFareCalculationStrategy.calculateFare(rideRequest);
         rideRequest.setFare(fare);
         RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
         driverMatchingStrategy.findMatchingDrivers(rideRequest);
