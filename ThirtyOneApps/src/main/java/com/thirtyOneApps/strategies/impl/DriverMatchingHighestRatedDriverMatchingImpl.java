@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class DriverMatchingHighestRatedDriverMatchingImpl implements DriverMatchingStrategy {
     @Override
-    public List<Driver> findMatchingDrivers(RideRequest rideRequest) {
+    public List<Driver> findMatchingDriver(RideRequest rideRequest) {
         return List.of();
     }
 }
