@@ -6,6 +6,7 @@ import com.thirtyOneApps.dtos.UserDTO;
 import com.thirtyOneApps.entities.Rider;
 import com.thirtyOneApps.entities.User;
 import com.thirtyOneApps.entities.enums.Roles;
+import com.thirtyOneApps.exceptions.RunTimeConflictException;
 import com.thirtyOneApps.repositories.UserRepository;
 import com.thirtyOneApps.services.AuthService;
 import com.thirtyOneApps.services.RiderService;
@@ -28,17 +29,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDTO signUp(SignUpDTO signUpDTO) {
-        User user = userRepository.findByEmail(signUpDTO.getEmail());
-        if(user!=null){
-            throw new RuntimeException("cant create, user already exists");
-        }
+        User user = userRepository.findByEmail(signUpDTO.getEmail()).orElse(null);
+        if(user!=null) throw  new RunTimeConflictException(("Cant create, email already exists: "+signUpDTO.getEmail()));
         User mappedUser = modelMapper.map(signUpDTO, User.class);
-        user.setUserRole(Set.of(Roles.RIDER));
-        User savedUser = userRepository.save(user);
+        mappedUser.setUserRole(Set.of(Roles.RIDER));
+        User savedUser = userRepository.save(mappedUser);
 
         riderService.createRider(savedUser);
+        //TODO --> add wallet related service
 
-        return null;
+        return modelMapper.map(savedUser, UserDTO.class);
     }
 
     @Override
