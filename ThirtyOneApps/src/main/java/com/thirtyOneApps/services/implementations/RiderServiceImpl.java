@@ -5,8 +5,11 @@ import com.thirtyOneApps.dtos.RideDTO;
 import com.thirtyOneApps.dtos.RideRequestDTO;
 import com.thirtyOneApps.dtos.RiderDTO;
 import com.thirtyOneApps.entities.RideRequest;
+import com.thirtyOneApps.entities.Rider;
+import com.thirtyOneApps.entities.User;
 import com.thirtyOneApps.entities.enums.RideRequestStatus;
 import com.thirtyOneApps.repositories.RideRequestRepository;
+import com.thirtyOneApps.repositories.RiderRepository;
 import com.thirtyOneApps.services.RiderService;
 import com.thirtyOneApps.strategies.DriverMatchingStrategy;
 import com.thirtyOneApps.strategies.RideFareCalculationStrategy;
@@ -24,6 +27,7 @@ public class RiderServiceImpl implements RiderService {
     private final DriverMatchingStrategy driverMatchingStrategy;
     private final RideRequestRepository rideRequestRepository;
     private final ModelMapper modelMapper;
+    private final RiderRepository riderRepository;
     @Override
     public RideRequestDTO requestRide(RideRequestDTO rideRequestDTO) {
         RideRequest rideRequest = modelMapper.map(rideRequestDTO,RideRequest.class);
@@ -55,5 +59,14 @@ public class RiderServiceImpl implements RiderService {
     @Override
     public List<RideDTO> getAllMyRides() {
         return List.of();
+    }
+
+    @Override
+    public Rider createRider(User user) {
+        Rider rider = Rider.builder()
+                .user(user)
+                .rating(0.0)
+                .build();
+        return riderRepository.save(rider);
     }
 }

@@ -1,13 +1,15 @@
 package com.thirtyOneApps.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "rider")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Rider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

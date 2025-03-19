@@ -4,6 +4,8 @@ import com.thirtyOneApps.dtos.DriverDTO;
 import com.thirtyOneApps.dtos.RideDTO;
 import com.thirtyOneApps.dtos.RideRequestDTO;
 import com.thirtyOneApps.dtos.RiderDTO;
+import com.thirtyOneApps.entities.Rider;
+import com.thirtyOneApps.entities.User;
 
 import java.util.List;
 
@@ -17,4 +19,6 @@ public interface RiderService {
     public RiderDTO getProfile();
 
     public List<RideDTO> getAllMyRides();
+
+    Rider createRider(User user);
 }

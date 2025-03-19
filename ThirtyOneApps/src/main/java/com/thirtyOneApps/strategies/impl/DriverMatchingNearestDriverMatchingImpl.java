@@ -14,7 +14,6 @@ import java.util.List;
 @Primary
 @RequiredArgsConstructor
 public class DriverMatchingNearestDriverMatchingImpl implements DriverMatchingStrategy {
-
     private final DriverRepository driverRepository;
     @Override
     public List<Driver> findMatchingDriver(RideRequest rideRequest) {
